@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { databaseConnection } from "./config.js";
+import userRoutes from "./src/routes/userRoutes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 //ROUTES
+app.use("/user", userRoutes);
 
 //MONGODB CONNECTION
 mongoose.set("strictQuery", true);
