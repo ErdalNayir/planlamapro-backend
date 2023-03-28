@@ -9,21 +9,22 @@ export const signup = async (req, res) => {
     const { name, surname, age, username, password, confirmPassword, gender } =
       req.body;
 
-    // Check if user already exists
+    // Eğer kullanıcı varsa hata response ediliyor
     const user = await UserModel.findOne({ username });
     if (user) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "Bu kullanıcı zaten var" });
     }
 
+    //eğer password ve confirmPassword aynı değilse hata response ediliyor
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords don't match!" });
+      return res.status(400).json({ message: "Şifreler uyuşmuyor" });
     }
 
-    // Hash the password
+    // Password hash ile şifreleniyor
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user
+    // Yeni kullanıcı oluşturuluyor
     const newUser = new UserModel({
       name,
       surname,
@@ -34,15 +35,56 @@ export const signup = async (req, res) => {
     });
     await newUser.save();
 
-    // Generate a JWT token
+    // JWT Token oluşturuluyor
     const token = jwt.sign({ username, id: newUser._id }, jwtKey, {
       expiresIn: "3h",
     });
 
-    // Send the token as a response
+    //Token ve yeni kullanıcı response olarak döndürülüyor
     res.json({ newUser, token });
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
+};
+
+// Giriş yapma
+export const login = async (req, res) => {
+  const { username, password } = req.body; // gelen isteğin body'sinden email ve şifre bilgilerini alıyoruz
+
+  UserModel.findOne({ username }) // email adresine göre kullanıcıyı bulmak için veritabanı sorgusu yapıyoruz
+    .then((user) => {
+      if (!user) {
+        // kullanıcı bulunamadıysa hata mesajı döndürüyoruz
+        return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+      }
+
+      // kullanıcının girdiği şifreyi bcrypt kütüphanesiyle karşılaştırıyoruz
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          // eğer bir hata varsa hata mesajı döndürüyoruz
+          return res
+            .status(401)
+            .json({ message: "Kimlik doğrulama başarısız oldu" });
+        }
+
+        if (result) {
+          // şifreler eşleşiyorsa jwt token oluşturup döndürüyoruz
+          const token = jwt.sign({ username, id: user._id }, jwtKey, {
+            expiresIn: "3h",
+          });
+
+          return res
+            .status(200)
+            .json({ message: "Giriş başarılı", token, result });
+        }
+
+        // şifreler eşleşmiyorsa hata mesajı döndürüyoruz
+        res.status(401).json({ message: "Şifre veya Kullanıcı adı yalnış" });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
 };
