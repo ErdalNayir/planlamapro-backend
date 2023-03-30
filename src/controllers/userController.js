@@ -2,43 +2,52 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../models/users.js";
 import { jwtKey } from "../../config.js";
+import { signupSchema } from "../validations/userValidation.js";
 
 // Kayıt olma
 export const signup = async (req, res) => {
   try {
-    const { name, surname, age, username, password, confirmPassword, gender } =
-      req.body;
+    const { error, value } = signupSchema.validate(req.body);
+
+    //eğer validasyonda hata oluştuysa
+    if (error) {
+      res.status(400).send(error.details[0].message);
+    }
 
     // Eğer kullanıcı varsa hata response ediliyor
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({ username: value.username });
     if (user) {
       return res.status(400).json({ message: "Bu kullanıcı zaten var" });
     }
 
     //eğer password ve confirmPassword aynı değilse hata response ediliyor
-    if (password !== confirmPassword) {
+    if (value.password !== value.confirmPassword) {
       return res.status(400).json({ message: "Şifreler uyuşmuyor" });
     }
 
     // Password hash ile şifreleniyor
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(value.password, salt);
 
     // Yeni kullanıcı oluşturuluyor
     const newUser = new UserModel({
-      name,
-      surname,
-      age,
-      username,
-      gender,
+      name: value.name,
+      surname: value.surname,
+      age: value.age,
+      username: value.username,
+      gender: value.gender,
       password: hashedPassword,
     });
     await newUser.save();
 
     // JWT Token oluşturuluyor
-    const token = jwt.sign({ username, id: newUser._id }, jwtKey, {
-      expiresIn: "3h",
-    });
+    const token = jwt.sign(
+      { username: value.username, id: newUser._id },
+      jwtKey,
+      {
+        expiresIn: "3h",
+      }
+    );
 
     //Token ve yeni kullanıcı response olarak döndürülüyor
     res.json({ newUser, token });
