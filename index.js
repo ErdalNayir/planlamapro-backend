@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { databaseConnection } from "./config.js";
 import userRoutes from "./src/routes/userRoutes.js";
+import { logger } from "./src/logs/logger.js";
 
 const app = express();
 
@@ -11,6 +12,9 @@ const app = express();
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
+//LOGGER
+app.use(logger);
 
 //ROUTES
 app.use("/user", userRoutes);
