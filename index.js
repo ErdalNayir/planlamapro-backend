@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import { databaseConnection } from "./config.js";
 import userRoutes from "./src/routes/userRoutes.js";
+import roomRoutes from "./src/routes/roomRoutes.js";
 import { logger } from "./src/logs/logger.js";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(logger);
 
 //ROUTES
 app.use("/user", userRoutes);
+app.use("/room", roomRoutes);
 
 //MONGODB CONNECTION
 mongoose.set("strictQuery", true);

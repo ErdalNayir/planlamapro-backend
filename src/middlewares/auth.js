@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { jwtKey } from "../../config";
+import { jwtKey } from "../../config.js";
 
 // JWT kimlik doğrulama middleware'i
 export const authMiddleware = async (req, res, next) => {
