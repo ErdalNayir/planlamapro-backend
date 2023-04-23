@@ -24,7 +24,6 @@ export const createRoom = async (req, res) => {
     });
 
     //add room id to user's owned room
-    console.log(req.session.userId);
     await UserModel.findById(req.session.userId).then((document) => {
       document.ownedRooms.push(roomModel._id.toString());
       document.save();
@@ -32,6 +31,81 @@ export const createRoom = async (req, res) => {
 
     // return room as response
     res.status(200).json({ roomModel });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const getRoomByOwner = async (req, res) => {
+  try {
+    const { creatorId } = req.body;
+
+    await RoomModel.find({ creatorId: creatorId }).then((data) => {
+      res.status(200).json(data);
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const getRoomById = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+
+    await RoomModel.findById(roomId)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const deleteRoom = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+
+    await RoomModel.deleteOne({ _id: roomId })
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const updateRoom = async (req, res) => {
+  try {
+    const { error, value } = roomValidator.validate(req.body);
+
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+
+    await RoomModel.updateOne(
+      { _id: value.roomId },
+      {
+        roomName: value.roomName,
+        startDate: value.startDate,
+        description: value.description,
+      }
+    )
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send();

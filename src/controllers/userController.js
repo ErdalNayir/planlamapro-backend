@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
     await newUser.save();
 
     //generate session
-    req.session.userId = user._id.toString();
+    req.session.userId = newUser._id.toString();
     // JWT Token oluşturuluyor
     const token = jwt.sign(
       { username: value.username, id: newUser._id },
