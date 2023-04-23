@@ -71,6 +71,17 @@ export const deleteRoom = async (req, res) => {
   try {
     const { roomId } = req.body;
 
+    //delte room id from user
+    const result = await UserModel.updateMany(
+      {},
+      { $pull: { ownedRooms: roomId, invitedRooms: roomId } }
+    );
+
+    if (result.nModified === 0) {
+      return res.status(404).json({ message: "Oda veya özellik bulunamadı." });
+    }
+
+    //delete room
     await RoomModel.deleteOne({ _id: roomId })
       .then((data) => {
         res.status(200).json(data);
