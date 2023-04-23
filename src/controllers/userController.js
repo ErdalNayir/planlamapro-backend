@@ -40,6 +40,8 @@ export const signup = async (req, res) => {
     });
     await newUser.save();
 
+    //generate session
+    req.session.userId = user._id.toString();
     // JWT Token oluşturuluyor
     const token = jwt.sign(
       { username: value.username, id: newUser._id },
@@ -82,6 +84,9 @@ export const login = async (req, res) => {
           const token = jwt.sign({ username, id: user._id }, jwtKey, {
             expiresIn: "3h",
           });
+
+          //generate session
+          req.session.userId = user._id.toString();
 
           return res
             .status(200)

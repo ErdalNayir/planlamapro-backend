@@ -6,6 +6,9 @@ import { databaseConnection } from "./config.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import roomRoutes from "./src/routes/roomRoutes.js";
 import { logger } from "./src/logs/logger.js";
+import session from "express-session";
+import { sessionKey } from "./config.js";
+import { expiryDate } from "./config.js";
 
 const app = express();
 
@@ -16,6 +19,16 @@ app.use(cors());
 
 //LOGGER
 app.use(logger);
+
+//add session
+app.use(
+  session({
+    secret: sessionKey,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: expiryDate },
+  })
+);
 
 //ROUTES
 app.use("/user", userRoutes);

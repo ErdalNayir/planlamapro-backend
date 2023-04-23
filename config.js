@@ -8,3 +8,7 @@ export const databaseConnection = {
 };
 
 export const jwtKey = process.env.JWT_SECRET_KEY;
+
+export const sessionKey = process.env.SESSION_KEY;
+
+export const expiryDate = 120 * 60 * 1000; // 120 minutes in milliseconds
