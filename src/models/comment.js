@@ -9,7 +9,6 @@ const CommentSchema = new mongoose.Schema(
       required: true,
     },
     date: { type: Date, default: Date.now },
-    post: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
   },
   { collection: "comments" }
 );

@@ -19,6 +19,30 @@ const roomSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+        required: false,
+        default: [],
+      },
+    ],
+    images: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Image",
+        required: false,
+        default: [],
+      },
+    ],
+    nodes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TimeNode",
+        required: false,
+        default: [],
+      },
+    ],
   },
   { collection: "eventroom" }
 );

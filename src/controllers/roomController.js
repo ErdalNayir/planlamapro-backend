@@ -71,7 +71,7 @@ export const deleteRoom = async (req, res) => {
   try {
     const { roomId } = req.body;
 
-    //delte room id from user
+    //delete room id from user
     const result = await UserModel.updateMany(
       {},
       { $pull: { ownedRooms: roomId, invitedRooms: roomId } }
@@ -117,6 +117,25 @@ export const updateRoom = async (req, res) => {
       .catch((err) => {
         res.status(400).json(err);
       });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const addUserToRoom = async (req, res) => {
+  try {
+    const { roomId, userId } = req.body;
+
+    await RoomModel.findById(roomId).then((document) => {
+      document.members.push(userId);
+      document.save();
+    });
+
+    await UserModel.findById(userId).then((document) => {
+      document.invitedRooms.push(roomId);
+      document.save();
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();

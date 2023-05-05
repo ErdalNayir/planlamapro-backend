@@ -2,7 +2,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../models/user.js";
 import { jwtKey } from "../../config.js";
-import { signupSchema } from "../validations/userValidation.js";
+import {
+  signupSchema,
+  updateUserSchema,
+} from "../validations/userValidation.js";
 
 // Kayıt olma
 export const signup = async (req, res) => {
@@ -101,4 +104,35 @@ export const login = async (req, res) => {
       console.log(err);
       res.status(500).json({ error: err });
     });
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { error, value } = updateUserSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+
+    await UserModel.updateOne(
+      { _id: value.userId },
+      {
+        name: value.name,
+        surname: value.surname,
+        age: value.age,
+        username: value.username,
+        gender: value.gender,
+        password: value.password,
+      }
+    )
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };

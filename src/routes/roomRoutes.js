@@ -5,6 +5,7 @@ import {
   getRoomById,
   deleteRoom,
   updateRoom,
+  addUserToRoom,
 } from "../controllers/roomController.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post("/createRoom", authMiddleware, createRoom);
 router.delete("/deleteroom", authMiddleware, deleteRoom);
 router.put("/updateroom", authMiddleware, updateRoom);
+router.post("/inviteMember", authMiddleware, addUserToRoom);
 
 //GET ROUTES
 router.get("/getbyowner", getRoomByOwner);
