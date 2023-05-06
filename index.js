@@ -7,6 +7,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import roomRoutes from "./src/routes/roomRoutes.js";
 import imageRoutes from "./src/routes/imageRoutes.js";
 import commentRoutes from "./src/routes/commentRoutes.js";
+import nodeRoutes from "./src/routes/nodeRoutes.js";
 import { logger } from "./src/logs/logger.js";
 import session from "express-session";
 import { sessionKey } from "./config.js";
@@ -37,6 +38,7 @@ app.use("/user", userRoutes);
 app.use("/room", roomRoutes);
 app.use("/images", imageRoutes);
 app.use("/comment", commentRoutes);
+app.use("/node", nodeRoutes);
 
 //MONGODB CONNECTION
 mongoose.set("strictQuery", true);
