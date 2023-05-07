@@ -3,16 +3,23 @@ import ImageModel from "../models/image.js";
 
 export const uploadImage = async (req, res) => {
   //catches server errors
+  const { roomId } = req.body;
   try {
-    // do some validation
-    const { imgUrl, roomId } = req.body;
+    if (!req.file) {
+      // Yükleme hatası - dosya bulunamadı
+      return res
+        .status(400)
+        .json({ message: "Yüklenen bir resim dosyası bulunamadı." });
+    }
 
-    //find user
+    const { filename, mimetype, path } = req.file;
 
-    // create room model
+    // Mongoose kullanarak resim bilgilerini kaydedin
     const imgModel = await ImageModel.create({
-      imgUrl: imgUrl,
-      sender: req.session.userId,
+      destination: path,
+      filename: filename,
+      sender: req.user.id,
+      mimeType: mimetype,
     });
 
     //add image id to room's images list
@@ -21,11 +28,16 @@ export const uploadImage = async (req, res) => {
       document.save();
     });
 
-    // return room as response
-    res.status(200).json({ imgModel });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
+    // Resim başarıyla kaydedildiyse, istemciye başarılı yanıtı döndürün
+    res.json({
+      message: "Resim başarıyla yüklendi",
+      filename: req.file,
+    });
+  } catch (error) {
+    // Hata durumunda istemciye hata yanıtı döndürün
+    res
+      .status(500)
+      .json({ message: "Resim yükleme hatası", error: error.message });
   }
 };
 

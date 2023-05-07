@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const ImageSchema = new mongoose.Schema(
   {
-    imgUrl: { type: String, required: true },
+    destination: { type: String, required: true },
+    filename: { type: String, required: true },
+    mimeType: { type: String, required: true },
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
