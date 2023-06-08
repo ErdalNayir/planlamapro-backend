@@ -6,6 +6,7 @@ import { databaseConnection } from "./config.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import roomRoutes from "./src/routes/roomRoutes.js";
 import imageRoutes from "./src/routes/imageRoutes.js";
+import edgeRoutes from "./src/routes/edgeRoutes.js";
 import commentRoutes from "./src/routes/commentRoutes.js";
 import nodeRoutes from "./src/routes/nodeRoutes.js";
 import { logger } from "./src/logs/logger.js";
@@ -29,7 +30,10 @@ app.use(
     secret: sessionKey,
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: expiryDate },
+    cookie: {
+      maxAge: 36000000,
+      httpOnly: false, // <- set httpOnly to false
+    },
   })
 );
 
@@ -39,6 +43,7 @@ app.use("/room", roomRoutes);
 app.use("/images", imageRoutes);
 app.use("/comment", commentRoutes);
 app.use("/node", nodeRoutes);
+app.use("/edges", edgeRoutes);
 
 //MONGODB CONNECTION
 mongoose.set("strictQuery", true);
@@ -49,8 +54,8 @@ mongoose
     { dbName: databaseConnection.dbName }
   )
   .then(() => {
-    app.listen(3000, "localhost", () => {
-      console.log("Server is running on port 3000");
+    app.listen(5000, "localhost", () => {
+      console.log("Server is running on port 5000");
     });
   })
   .catch((error) => console.log(error.message));

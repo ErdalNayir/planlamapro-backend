@@ -20,11 +20,11 @@ export const createRoom = async (req, res) => {
       roomName: value.roomName,
       startDate: value.startDate,
       description: value.description,
-      creatorId: req.session.userId,
+      creatorId: value.creatorId,
     });
 
     //add room id to user's owned room
-    await UserModel.findById(req.session.userId).then((document) => {
+    await UserModel.findById(value.creatorId).then((document) => {
       document.ownedRooms.push(roomModel._id.toString());
       document.save();
     });
@@ -42,8 +42,26 @@ export const getRoomByOwner = async (req, res) => {
     const { creatorId } = req.body;
 
     await RoomModel.find({ creatorId: creatorId }).then((data) => {
-      res.status(200).json(data);
+      return res.status(200).json(data);
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const getInvitedRooms = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await UserModel.findById(userId)
+      .populate("invitedRooms") // invitedRooms referansını doldurmak için populate kullanın
+      .exec();
+
+    // Eğer kullanıcı belgesi bulunduysa, invitedRooms özelliğine erişebilirsiniz
+    const invitedRooms = user.invitedRooms;
+    return res.status(200).json(invitedRooms);
+    // invitedRooms'u kullanarak gerekli işlemleri gerçekleştirin
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -125,17 +143,22 @@ export const updateRoom = async (req, res) => {
 
 export const addUserToRoom = async (req, res) => {
   try {
-    const { roomId, userId } = req.body;
+    const { roomId, username } = req.body;
 
-    await RoomModel.findById(roomId).then((document) => {
-      document.members.push(userId);
-      document.save();
+    await UserModel.findOne({ username: username }).then((doc) => {
+      if (doc.invitedRooms.includes(roomId)) {
+        res.status(400).send({ message: "Bu odaya zaten kayıtlı" });
+      } else {
+        doc.invitedRooms.push(roomId);
+        RoomModel.findById(roomId).then((document) => {
+          document.members.push(doc._id);
+          document.save();
+        });
+        doc.save();
+      }
     });
 
-    await UserModel.findById(userId).then((document) => {
-      document.invitedRooms.push(roomId);
-      document.save();
-    });
+    await res.status(200).send({ message: "İşlem başarılı" });
   } catch (err) {
     console.error(err);
     res.status(500).send();

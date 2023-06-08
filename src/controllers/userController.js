@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
 
     //eğer validasyonda hata oluştuysa
     if (error) {
-      res.status(400).send(error.details[0].message);
+      return res.status(400).send({ message: error.details[0].message });
     }
 
     // Eğer kullanıcı varsa hata response ediliyor
@@ -23,7 +23,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Bu kullanıcı zaten var" });
     }
 
-    //eğer password ve confirmPassword aynı değilse hata response ediliyor
+    // eğer password ve confirmPassword aynı değilse hata response ediliyor
     if (value.password !== value.confirmPassword) {
       return res.status(400).json({ message: "Şifreler uyuşmuyor" });
     }
@@ -36,7 +36,6 @@ export const signup = async (req, res) => {
     const newUser = new UserModel({
       name: value.name,
       surname: value.surname,
-      age: value.age,
       username: value.username,
       gender: value.gender,
       password: hashedPassword,
@@ -55,7 +54,7 @@ export const signup = async (req, res) => {
     );
 
     //Token ve yeni kullanıcı response olarak döndürülüyor
-    res.json({ newUser, token });
+    res.json({ newUser, token, newUser });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -93,7 +92,7 @@ export const login = async (req, res) => {
 
           return res
             .status(200)
-            .json({ message: "Giriş başarılı", token, result });
+            .json({ message: "Giriş başarılı", token, result, user });
         }
 
         // şifreler eşleşmiyorsa hata mesajı döndürüyoruz
@@ -135,4 +134,15 @@ export const updateUser = async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
+};
+
+export const cikisYap = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Oturumu sonlandırırken bir hata oluştu:", err);
+    } else {
+      // Oturum başarıyla sonlandırıldı, kullanıcıyı yönlendirin veya mesaj gönderin
+      res.send("Çıkış yapıldı");
+    }
+  });
 };

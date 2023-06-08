@@ -43,6 +43,14 @@ const roomSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    edges: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "NodeEdge",
+        required: false,
+        default: [],
+      },
+    ],
   },
   { collection: "eventroom" }
 );

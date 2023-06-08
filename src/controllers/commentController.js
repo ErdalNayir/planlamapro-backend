@@ -16,7 +16,7 @@ export const uploadComment = async (req, res) => {
     // create room model
     const commentModel = await CommentModel.create({
       content: value.content,
-      author: req.session.userId,
+      author: req.session.user.userId,
     });
 
     //add image id to room's images list

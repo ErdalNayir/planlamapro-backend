@@ -1,5 +1,10 @@
 import express from "express";
-import { signup, login, updateUser } from "../controllers/userController.js";
+import {
+  signup,
+  login,
+  updateUser,
+  cikisYap,
+} from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
@@ -8,5 +13,6 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/updateUser", authMiddleware, updateUser);
+router.get("/logout", authMiddleware, cikisYap);
 
 export default router;

@@ -6,6 +6,7 @@ import {
   deleteRoom,
   updateRoom,
   addUserToRoom,
+  getInvitedRooms,
 } from "../controllers/roomController.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
@@ -16,9 +17,10 @@ router.post("/createRoom", authMiddleware, createRoom);
 router.delete("/deleteroom", authMiddleware, deleteRoom);
 router.put("/updateroom", authMiddleware, updateRoom);
 router.post("/inviteMember", authMiddleware, addUserToRoom);
+router.post("/getinvitedrooms", authMiddleware, getInvitedRooms);
 
 //GET ROUTES
-router.get("/getbyowner", getRoomByOwner);
-router.get("/getbyid", getRoomById);
+router.post("/getbyowner", authMiddleware, getRoomByOwner);
+router.get("/getbyid", authMiddleware, getRoomById);
 
 export default router;

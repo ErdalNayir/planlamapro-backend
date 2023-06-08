@@ -15,16 +15,16 @@ export const saveTimeNode = async (req, res) => {
 
     // create room model
     const nodeModel = await TimeNodeModel.create({
+      id: value.id,
       header: value.header,
       description: value.description,
       state: value.state,
       startHour: value.startHour,
-      finishHour: value.finishHour,
       roomId: value.roomId,
+      positionAbsolute: value.positionAbsolute,
     });
 
-    //add image id to room's images list
-    await RoomModel.findById(roomId).then((document) => {
+    await RoomModel.findById(value.roomId).then((document) => {
       document.nodes.push(nodeModel._id.toString());
       document.save();
     });
@@ -41,7 +41,6 @@ export const deleteNode = async (req, res) => {
   try {
     const { nodeId } = req.body;
 
-    //delete image id from user
     const result = await RoomModel.updateMany({}, { $pull: { nodes: nodeId } });
 
     if (result.nModified === 0) {
@@ -77,7 +76,6 @@ export const updatedNode = async (req, res) => {
         description: value.description,
         state: value.state,
         startHour: value.startHour,
-        finishHour: value.finishHour,
         roomId: value.roomId,
       }
     )
@@ -91,4 +89,37 @@ export const updatedNode = async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
+};
+
+export const getRoomNodes = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+
+    const room = await RoomModel.findById(roomId).populate("nodes").exec();
+
+    // Eğer kullanıcı belgesi bulunduysa, invitedRooms özelliğine erişebilirsiniz
+    const nodes = room.nodes;
+    return res.status(200).json(nodes);
+    // invitedRooms'u kullanarak gerekli işlemleri gerçekleştirin
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const deleteAllNodesFromRoom = async (req, res) => {
+  const { roomId } = req.body;
+
+  // Node'ları silme işlemi
+  RoomModel.findByIdAndUpdate(roomId, { $set: { nodes: [] } }, { new: true })
+    .then((updatedRoom) => {
+      if (!updatedRoom) {
+        return res.status(404).json({ error: "Oda bulunamadı" });
+      }
+      res.json({ message: "Node'lar başarıyla silindi" });
+    })
+    .catch((error) => {
+      console.error("Node'ları silme hatası:", error);
+      res.status(500).json({ error: "Sunucu hatası" });
+    });
 };
