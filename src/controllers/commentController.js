@@ -16,11 +16,11 @@ export const uploadComment = async (req, res) => {
     // create room model
     const commentModel = await CommentModel.create({
       content: value.content,
-      author: req.session.user.userId,
+      author: value.author,
     });
 
     //add image id to room's images list
-    await RoomModel.findById(roomId).then((document) => {
+    await RoomModel.findById(value.roomId).then((document) => {
       document.comments.push(commentModel._id.toString());
       document.save();
     });
@@ -82,6 +82,24 @@ export const updateComment = async (req, res) => {
       .catch((err) => {
         res.status(400).json(err);
       });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+export const getRoomComment = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+
+    const room = await RoomModel.findById(roomId)
+      .populate("comments") // invitedRooms referansını doldurmak için populate kullanın
+      .exec();
+
+    // Eğer kullanıcı belgesi bulunduysa, invitedRooms özelliğine erişebilirsiniz
+    const comments = room.comments;
+    return res.status(200).json(comments);
+    // invitedRooms'u kullanarak gerekli işlemleri gerçekleştirin
   } catch (err) {
     console.error(err);
     res.status(500).send();

@@ -18,9 +18,11 @@ export const uploadImage = async (req, res) => {
     const imgModel = await ImageModel.create({
       destination: path,
       filename: filename,
-      sender: req.user.id,
       mimeType: mimetype,
     });
+
+    const id = roomId;
+    console.log(roomId);
 
     //add image id to room's images list
     await RoomModel.findById(roomId).then((document) => {

@@ -5,11 +5,6 @@ const ImageSchema = new mongoose.Schema(
     destination: { type: String, required: true },
     filename: { type: String, required: true },
     mimeType: { type: String, required: true },
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     date: { type: Date, default: Date.now },
   },
   { collection: "images" }

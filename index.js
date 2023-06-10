@@ -12,7 +12,6 @@ import nodeRoutes from "./src/routes/nodeRoutes.js";
 import { logger } from "./src/logs/logger.js";
 import session from "express-session";
 import { sessionKey } from "./config.js";
-import { expiryDate } from "./config.js";
 
 const app = express();
 
