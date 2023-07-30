@@ -7,7 +7,7 @@ import path from "path";
 // });
 
 var directoryPath = process.cwd();
-var directoryPath = directoryPath + "\\src\\logs\\";
+var directoryPath = directoryPath + "//src//logs//";
 
 const accessLogStream = createWriteStream(
   path.join(directoryPath, "access.log"),

@@ -44,7 +44,7 @@ app.use("/comment", commentRoutes);
 app.use("/node", nodeRoutes);
 app.use("/edges", edgeRoutes);
 
-//MONGODB CONNECTION
+//MONGODB CONNECTIO
 mongoose.set("strictQuery", true);
 
 mongoose
@@ -53,7 +53,7 @@ mongoose
     { dbName: databaseConnection.dbName }
   )
   .then(() => {
-    app.listen(5000, "localhost", () => {
+    app.listen(3000, "0.0.0.0", () => {
       console.log("Server is running on port 5000");
     });
   })

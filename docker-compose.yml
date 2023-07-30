@@ -8,11 +8,28 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
       MONGO_INITDB_ROOT_PASSWORD: "*2023*2023*"
+
   app:
-    build: .
+    image: erdalnyr01/planlama-pro-api:1.0
+    expose:
+      - "3000"
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - mongo
+    volumes:
+      - app-data:/src
+    networks:
+      - app-network
     environment:
-      DB_URL: mongodb://root:example@mongo:27017/PlanlamaProDB?authSource=admin
+      - MONGODB_PASSWORD=*2023*2023*
+      - MONGODB_DBNAME=PlanlamaProDB
+      - JWT_SECRET_KEY=38154A9GNBRS48GB215368E6851BF6
+      - SESSION_KEY=5wWzDZM3k2KrRVRfyQadZNxdTElEn8rD
+
+volumes:
+  app-data:
+
+networks:
+  app-network:
+    driver: bridge
