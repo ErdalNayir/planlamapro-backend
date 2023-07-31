@@ -1,4 +1,4 @@
-export const turkishJoi = {
+const turkishJoi = {
   // String doğrulama hataları
   "string.base": "{#label} bir dize olmalıdır",
   "string.empty": "{#label} boş olamaz",

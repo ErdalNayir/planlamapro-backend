@@ -1,8 +1,8 @@
-import CommentModel from "../models/comment.js";
-import RoomModel from "../models/eventroom.js";
-import { commentValidator } from "../validations/commentValidation.js";
+const CommentModel = require("../models/comment.js");
+const RoomModel = require("../models/eventroom.js");
+const { commentValidator } = require("../validations/commentValidation.js");
 
-export const uploadComment = async (req, res) => {
+const uploadComment = async (req, res) => {
   //catches server errors
   try {
     // do some validation
@@ -33,7 +33,7 @@ export const uploadComment = async (req, res) => {
   }
 };
 
-export const deleteComment = async (req, res) => {
+const deleteComment = async (req, res) => {
   try {
     const { commentId } = req.body;
 
@@ -61,7 +61,7 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-export const updateComment = async (req, res) => {
+const updateComment = async (req, res) => {
   try {
     const { error, value } = commentValidator.validate(req.body);
 
@@ -88,7 +88,7 @@ export const updateComment = async (req, res) => {
   }
 };
 
-export const getRoomComment = async (req, res) => {
+const getRoomComment = async (req, res) => {
   try {
     const { roomId } = req.body;
 
@@ -104,4 +104,11 @@ export const getRoomComment = async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
+};
+
+module.exports = {
+  updateComment,
+  uploadComment,
+  deleteComment,
+  getRoomComment,
 };

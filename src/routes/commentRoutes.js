@@ -1,11 +1,11 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   uploadComment,
   updateComment,
   deleteComment,
   getRoomComment,
-} from "../controllers/commentController.js";
-import { authMiddleware } from "../middlewares/auth.js";
+} = require("../controllers/commentController.js");
+const { authMiddleware } = require("../middlewares/auth.js");
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.post("/getroomComment", authMiddleware, getRoomComment);
 router.put("/updateComment", authMiddleware, updateComment);
 router.delete("/deleteComment", authMiddleware, deleteComment);
 
-export default router;
+module.exports = router;

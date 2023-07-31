@@ -1,7 +1,7 @@
-import Joi from "joi";
-import { turkishJoi } from "./language.js";
+const Joi = require("joi");
+const { turkishJoi } = require("./language.js");
 
-export const signupSchema = Joi.object({
+const signupSchema = Joi.object({
   name: Joi.string()
     .min(3)
     .max(20)
@@ -34,7 +34,7 @@ export const signupSchema = Joi.object({
     .messages(turkishJoi),
 });
 
-export const updateUserSchema = Joi.object({
+const updateUserSchema = Joi.object({
   name: Joi.string()
     .min(3)
     .max(20)

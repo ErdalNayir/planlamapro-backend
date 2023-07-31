@@ -1,8 +1,11 @@
-import express from "express";
-import { uploadImage, deleteImage } from "../controllers/imageController.js";
-import { authMiddleware } from "../middlewares/auth.js";
-import multer from "multer";
-import path from "path";
+const express = require("express");
+const {
+  uploadImage,
+  deleteImage,
+} = require("../controllers/imageController.js");
+const { authMiddleware } = require("../middlewares/auth.js");
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -22,4 +25,4 @@ const router = express.Router();
 router.post("/uploadImg", authMiddleware, upload.single("image"), uploadImage);
 router.delete("/deleteImg", authMiddleware, deleteImage);
 
-export default router;
+module.exports = router;

@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import { jwtKey } from "../../config.js";
+const jwt = require("jsonwebtoken");
+const { jwtKey } = require("../../config.js");
 
 // JWT kimlik doğrulama middleware'i
-export const authMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   // İstek headerdan token alınıyor
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -23,3 +23,5 @@ export const authMiddleware = async (req, res, next) => {
       .json({ message: "Token doğrulaması başarısız oldu" });
   }
 };
+
+module.exports = { authMiddleware };

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const NodeSchema = new mongoose.Schema(
   {
@@ -39,4 +39,4 @@ const NodeSchema = new mongoose.Schema(
 
 const TimeNodeModel = mongoose.model("TimeNode", NodeSchema);
 
-export default TimeNodeModel;
+module.exports = TimeNodeModel;

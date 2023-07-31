@@ -1,8 +1,8 @@
-import TimeNodeModel from "../models/timeNode.js";
-import RoomModel from "../models/eventroom.js";
-import { nodeValidator } from "../validations/timeNodeValidation.js";
+const TimeNodeModel = require("../models/timeNode.js");
+const RoomModel = require("../models/eventroom.js");
+const { nodeValidator } = require("../validations/timeNodeValidation.js");
 
-export const saveTimeNode = async (req, res) => {
+const saveTimeNode = async (req, res) => {
   //catches server errors
   try {
     // do some validation
@@ -37,7 +37,7 @@ export const saveTimeNode = async (req, res) => {
   }
 };
 
-export const deleteNode = async (req, res) => {
+const deleteNode = async (req, res) => {
   try {
     const { nodeId } = req.body;
 
@@ -61,7 +61,7 @@ export const deleteNode = async (req, res) => {
   }
 };
 
-export const updatedNode = async (req, res) => {
+const updatedNode = async (req, res) => {
   try {
     const { error, value } = nodeValidator.validate(req.body);
 
@@ -91,7 +91,7 @@ export const updatedNode = async (req, res) => {
   }
 };
 
-export const getRoomNodes = async (req, res) => {
+const getRoomNodes = async (req, res) => {
   try {
     const { roomId } = req.body;
 
@@ -107,7 +107,7 @@ export const getRoomNodes = async (req, res) => {
   }
 };
 
-export const deleteAllNodesFromRoom = async (req, res) => {
+const deleteAllNodesFromRoom = async (req, res) => {
   const { roomId } = req.body;
 
   // Node'ları silme işlemi
@@ -122,4 +122,12 @@ export const deleteAllNodesFromRoom = async (req, res) => {
       console.error("Node'ları silme hatası:", error);
       res.status(500).json({ error: "Sunucu hatası" });
     });
+};
+
+module.exports = {
+  saveTimeNode,
+  updatedNode,
+  deleteNode,
+  deleteAllNodesFromRoom,
+  getRoomNodes,
 };

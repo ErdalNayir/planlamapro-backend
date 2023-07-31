@@ -1,12 +1,13 @@
-import express from "express";
-import {
+const express = require("express");
+
+const {
   saveTimeNode,
   updatedNode,
   deleteNode,
   getRoomNodes,
   deleteAllNodesFromRoom,
-} from "../controllers/nodeController.js";
-import { authMiddleware } from "../middlewares/auth.js";
+} = require("../controllers/nodeController.js");
+const { authMiddleware } = require("../middlewares/auth.js");
 
 const router = express.Router();
 
@@ -18,4 +19,4 @@ router.post("/deletenodes", authMiddleware, deleteAllNodesFromRoom);
 router.put("/updateNode", authMiddleware, updatedNode);
 router.delete("/deleteNode", authMiddleware, deleteNode);
 
-export default router;
+module.exports = router;

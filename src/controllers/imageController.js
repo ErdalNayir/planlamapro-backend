@@ -1,7 +1,7 @@
-import RoomModel from "../models/eventroom.js";
-import ImageModel from "../models/image.js";
+const RoomModel = require("../models/eventroom.js");
+const ImageModel = require("../models/image.js");
 
-export const uploadImage = async (req, res) => {
+const uploadImage = async (req, res) => {
   //catches server errors
   const { roomId } = req.body;
   try {
@@ -43,7 +43,7 @@ export const uploadImage = async (req, res) => {
   }
 };
 
-export const deleteImage = async (req, res) => {
+const deleteImage = async (req, res) => {
   try {
     const { imgId } = req.body;
 
@@ -67,3 +67,5 @@ export const deleteImage = async (req, res) => {
     res.status(500).send();
   }
 };
+
+module.exports = { uploadImage, deleteImage };

@@ -1,7 +1,7 @@
-import EdgeModel from "../models/nodeEdges.js";
-import RoomModel from "../models/eventroom.js";
+const EdgeModel = require("../models/nodeEdges.js");
+const RoomModel = require("../models/eventroom.js");
 
-export const saveEdge = async (req, res) => {
+const saveEdge = async (req, res) => {
   //catches server errors
   try {
     // do some validation
@@ -31,7 +31,7 @@ export const saveEdge = async (req, res) => {
   }
 };
 
-export const getRoomEdges = async (req, res) => {
+const getRoomEdges = async (req, res) => {
   try {
     const { roomId } = req.body;
 
@@ -47,7 +47,7 @@ export const getRoomEdges = async (req, res) => {
   }
 };
 
-export const deleteAllEdgesFromRoom = async (req, res) => {
+const deleteAllEdgesFromRoom = async (req, res) => {
   const { roomId } = req.body;
 
   // Node'ları silme işlemi
@@ -63,3 +63,5 @@ export const deleteAllEdgesFromRoom = async (req, res) => {
       res.status(500).json({ error: "Sunucu hatası" });
     });
 };
+
+module.exports = { saveEdge, getRoomEdges, deleteAllEdgesFromRoom };
