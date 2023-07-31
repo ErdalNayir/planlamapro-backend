@@ -1,5 +1,5 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createRoom,
   getRoomByOwner,
   getRoomById,
@@ -7,8 +7,8 @@ import {
   updateRoom,
   addUserToRoom,
   getInvitedRooms,
-} from "../controllers/roomController.js";
-import { authMiddleware } from "../middlewares/auth.js";
+} = require("../controllers/roomController.js");
+const { authMiddleware } = require("../middlewares/auth.js");
 
 const router = express.Router();
 
@@ -23,4 +23,4 @@ router.post("/getinvitedrooms", authMiddleware, getInvitedRooms);
 router.post("/getbyowner", authMiddleware, getRoomByOwner);
 router.get("/getbyid", authMiddleware, getRoomById);
 
-export default router;
+module.exports = router;

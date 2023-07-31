@@ -1,6 +1,6 @@
-import morgan from "morgan";
-import { createWriteStream } from "fs";
-import path from "path";
+const morgan = require("morgan");
+const { createWriteStream } = require("fs");
+const path = require("path");
 
 // const accessLogStream = createWriteStream(path.join(__dirname, "access.log"), {
 //   flags: "a",
@@ -14,4 +14,6 @@ const accessLogStream = createWriteStream(
   { flags: "a" }
 );
 
-export const logger = morgan("combined", { stream: accessLogStream });
+const logger = morgan("combined", { stream: accessLogStream });
+
+module.exports = { logger };

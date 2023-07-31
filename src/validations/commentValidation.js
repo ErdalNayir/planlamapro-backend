@@ -1,7 +1,7 @@
-import Joi from "joi";
-import { turkishJoi } from "./language.js";
+const Joi = require("joi");
+const { turkishJoi } = require("./language.js");
 
-export const commentValidator = Joi.object({
+const commentValidator = Joi.object({
   content: Joi.string().min(3).max(100).required().messages(turkishJoi),
   roomId: Joi.string().required().messages(turkishJoi),
   author: Joi.string().required().messages(turkishJoi),

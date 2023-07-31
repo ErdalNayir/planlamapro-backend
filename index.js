@@ -1,17 +1,17 @@
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import { databaseConnection } from "./config.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import roomRoutes from "./src/routes/roomRoutes.js";
-import imageRoutes from "./src/routes/imageRoutes.js";
-import edgeRoutes from "./src/routes/edgeRoutes.js";
-import commentRoutes from "./src/routes/commentRoutes.js";
-import nodeRoutes from "./src/routes/nodeRoutes.js";
-import { logger } from "./src/logs/logger.js";
-import session from "express-session";
-import { sessionKey } from "./config.js";
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const { databaseConnection } = require("./config.js");
+const userRoutes = require("./src/routes/userRoutes.js");
+const roomRoutes = require("./src/routes/roomRoutes.js");
+const imageRoutes = require("./src/routes/imageRoutes.js");
+const edgeRoutes = require("./src/routes/edgeRoutes.js");
+const commentRoutes = require("./src/routes/commentRoutes.js");
+const nodeRoutes = require("./src/routes/nodeRoutes.js");
+const { logger } = require("./src/logs/logger.js");
+const session = require("express-session");
+const { sessionKey } = require("./config.js");
 
 const app = express();
 
@@ -53,8 +53,10 @@ mongoose
     { dbName: databaseConnection.dbName }
   )
   .then(() => {
-    app.listen(3000, "0.0.0.0", () => {
-      console.log("Server is running on port 5000");
+    app.listen(3000, "localhost", () => {
+      console.log("Server is running on port 3000");
     });
   })
   .catch((error) => console.log(error.message));
+
+module.exports = app;

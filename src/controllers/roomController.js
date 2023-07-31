@@ -1,8 +1,8 @@
-import { roomValidator } from "../validations/roomValidation.js";
-import RoomModel from "../models/eventroom.js";
-import UserModel from "../models/user.js";
+const { roomValidator } = require("../validations/roomValidation.js");
+const RoomModel = require("../models/eventroom.js");
+const UserModel = require("../models/user.js");
 
-export const createRoom = async (req, res) => {
+const createRoom = async (req, res) => {
   //catches server errors
   try {
     // do some validation
@@ -37,7 +37,7 @@ export const createRoom = async (req, res) => {
   }
 };
 
-export const getRoomByOwner = async (req, res) => {
+const getRoomByOwner = async (req, res) => {
   try {
     const { creatorId } = req.body;
 
@@ -50,7 +50,7 @@ export const getRoomByOwner = async (req, res) => {
   }
 };
 
-export const getInvitedRooms = async (req, res) => {
+const getInvitedRooms = async (req, res) => {
   try {
     const { userId } = req.body;
 
@@ -68,7 +68,7 @@ export const getInvitedRooms = async (req, res) => {
   }
 };
 
-export const getRoomById = async (req, res) => {
+const getRoomById = async (req, res) => {
   try {
     const { roomId } = req.body;
 
@@ -85,7 +85,7 @@ export const getRoomById = async (req, res) => {
   }
 };
 
-export const deleteRoom = async (req, res) => {
+const deleteRoom = async (req, res) => {
   try {
     const { roomId } = req.body;
 
@@ -113,7 +113,7 @@ export const deleteRoom = async (req, res) => {
   }
 };
 
-export const updateRoom = async (req, res) => {
+const updateRoom = async (req, res) => {
   try {
     const { error, value } = roomValidator.validate(req.body);
 
@@ -141,7 +141,7 @@ export const updateRoom = async (req, res) => {
   }
 };
 
-export const addUserToRoom = async (req, res) => {
+const addUserToRoom = async (req, res) => {
   try {
     const { roomId, username } = req.body;
 
@@ -163,4 +163,14 @@ export const addUserToRoom = async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
+};
+
+module.exports = {
+  createRoom,
+  getRoomByOwner,
+  getRoomById,
+  deleteRoom,
+  updateRoom,
+  getInvitedRooms,
+  addUserToRoom,
 };

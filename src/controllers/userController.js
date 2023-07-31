@@ -1,14 +1,14 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import UserModel from "../models/user.js";
-import { jwtKey } from "../../config.js";
-import {
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const UserModel = require("../models/user.js");
+const { jwtKey } = require("../../config.js");
+const {
   signupSchema,
   updateUserSchema,
-} from "../validations/userValidation.js";
+} = require("../validations/userValidation.js");
 
 // Kayıt olma
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const { error, value } = signupSchema.validate(req.body);
 
@@ -62,7 +62,7 @@ export const signup = async (req, res) => {
 };
 
 // Giriş yapma
-export const login = async (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body; // gelen isteğin body'sinden email ve şifre bilgilerini alıyoruz
 
   UserModel.findOne({ username }) // email adresine göre kullanıcıyı bulmak için veritabanı sorgusu yapıyoruz
@@ -105,7 +105,7 @@ export const login = async (req, res) => {
     });
 };
 
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const { error, value } = updateUserSchema.validate(req.body);
 
@@ -136,7 +136,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const cikisYap = async (req, res) => {
+const cikisYap = async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Oturumu sonlandırırken bir hata oluştu:", err);
@@ -146,3 +146,5 @@ export const cikisYap = async (req, res) => {
     }
   });
 };
+
+module.exports = { signup, login, updateUser, cikisYap };

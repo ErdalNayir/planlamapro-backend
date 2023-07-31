@@ -1,11 +1,11 @@
-import express from "express";
+const express = require("express");
 
-import { authMiddleware } from "../middlewares/auth.js";
-import {
+const { authMiddleware } = require("../middlewares/auth.js");
+const {
   saveEdge,
   getRoomEdges,
   deleteAllEdgesFromRoom,
-} from "../controllers/edgeController.js";
+} = require("../controllers/edgeController.js");
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.post("/saveEdge", authMiddleware, saveEdge);
 router.post("/getroomedges", authMiddleware, getRoomEdges);
 router.post("/deleteedges", authMiddleware, deleteAllEdgesFromRoom);
 
-export default router;
+module.exports = router;
